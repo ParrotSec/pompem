@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: pompem
-Source: https://github.com/rfunix/Pompem
+Source: https://nest.parrotsec.org/packages/tools/pompem
 
 Files: *
 Copyright: 2015-2016 Rafael Francischini <rafinha.unix@gmail.com>
@@ -11,6 +11,15 @@ Files: debian/*
 Copyright: 2015-2020 Giovani Augusto Ferreira <giovani@debian.org>
            2015      Joao Eriberto Mota Filho <eriberto@debian.org>
            2019-2020 Samuel Henrique <samueloph@debian.org>
+License: GPL-3+
+
+Files:
+  debian/copyright
+  debian/control
+  common/print_messages.py
+  core/scrapers.py
+  core/exploit_finder.py
+Copyright: 2020 Nong Hoang Tu <dmknght@parrotsec.org>
 License: GPL-3+
 
 License: GPL-3+

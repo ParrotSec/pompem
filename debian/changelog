@@ -1,3 +1,12 @@
+pompem (0.2.1-parrot0) rolling-testing; urgency=medium
+
+  * Remove a down service
+  * Remove vulner which requires API
+  * Update new parser for wpscandb (wpvulndb)
+  * More friendly result.
+
+ -- Nong Hoang Tu <dmknght@parrotsec.org>  Mon, 09 Nov 2020 22:44:53 +0700
+
 pompem (0.2.0-6) unstable; urgency=medium
 
   [ Debian Janitor ]
