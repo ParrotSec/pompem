@@ -249,10 +249,10 @@ class WpvulndbB(Scraper):
         self.url_base = "https://wpscan.com"
         self.page_max = 2
         self.list_result = []
-        self.regex_item = re.compile(r'(?msi)<tr>.*?<td>.*?<a.*?</tr>')
-        self.regex_name = re.compile(r'(?msi)<a href="[^"]*?">\d+?<.*?href.*?>([^<]*?)<')
-        self.regex_date = re.compile(r'(?msi)created-at">([^<]*?)<')
-        self.regex_url = re.compile(r'(?msi)<a href="([^"]*?)">\d+?<')
+        self.regex_item = re.compile(r'(?msi)<div class=\"item_itemWrapper__rmvws\">.*?</div><div.*?<p.*?</div.*?<div.*?</div></div>')
+        self.regex_name = re.compile(r'(?msi)<a href=\"[^\"]*?\">\d+?<.*?href.*?>([^<]*?)<')
+        self.regex_date = re.compile(r'<p class=\"item_itemText__5TkXs\">([0-9\-]+)</p>')
+        self.regex_url = re.compile(r'(?msi)<a href=\"([^\"]*?)\">\d+?<')
 
     def run(self, ):
         for page in range(self.page_max+1):
