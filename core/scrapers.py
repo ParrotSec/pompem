@@ -243,8 +243,10 @@ class WpvulndbB(Scraper):
         self.name_site = "Wpvulndb"
         self.name_class = NationaVulnerabilityDB.__name__
         self.key_word = key_word
-        self.url = "https://wpvulndb.com/searches?page={1}&text={0}&utf8=%E2%9C%93&vuln_type="
-        self.url_base = "https://wpvulndb.com"
+        # self.url = "https://wpvulndb.com/searches?page={1}&text={0}&utf8=%E2%9C%93&vuln_type="
+        # self.url_base = "https://wpvulndb.com"
+        self.url = "https://wpscan.com/search?page={1}&text={0}"
+        self.url_base = "https://wpscan.com"
         self.page_max = 2
         self.list_result = []
         self.regex_item = re.compile(r'(?msi)<tr>.*?<td>.*?<a.*?</tr>')
