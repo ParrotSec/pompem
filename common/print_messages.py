@@ -38,11 +38,12 @@ MAX_PRINT_PER_SITE = 30
 
 
 def show_results(key_word, list_results):
+    line = "*" + "=" * 80 + "+"
     print ("+Results {0}".format(key_word))
-    print ("+" + "-" * 200 + "+")
+    print (line)
     print (
-        "+Date            Description                                     Url                                    ")
-    print ("+" + "-" * 200 + "+")
+        "|  Date                                     Url                                    ")
+    print (line)
 
     for dict_result in list_results:
         count_print = 0
@@ -51,7 +52,10 @@ def show_results(key_word, list_results):
                 if (count_print > MAX_PRINT_PER_SITE):
                     break
                 count_print += 1
-                print("+ {0} | {1} | {2} ".format(exploit_data["date"],
-                                                  str(exploit_data["name"])[0:50],
-                                                  exploit_data["url"]))
-                print ("+" + "-" * 200 + "+")
+                # print("| {0} | {1} | {2} ".format(exploit_data["date"],
+                #                                   str(exploit_data["name"])[0:50],
+                #                                   exploit_data["url"]))
+                print("| {0} | {1}".format(exploit_data["date"], exploit_data["url"]))
+                print("|" + "-" * 80)
+                print("| {0}".format(str(exploit_data["name"])))
+                print (line)
