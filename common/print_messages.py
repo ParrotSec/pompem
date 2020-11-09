@@ -18,11 +18,12 @@ BASIC_INFO_MESSAGE = """
             |     ___/  _ \ /      \\____ \_/ __ \ /      \\
             |    |  (  <_> )  Y Y  \  |_> >  ___/|  Y Y  \\
             |____|   \____/|__|_|  /   __/ \___  >__|_|  /
-                                 \/|__|        \/      \/
+                                 \/|__|        \/      \/ 0.2.1 Parrot
 
 
     Rafael Francischini (Programmer and Ethical Hacker) - @rfunix
     Bruno Fraga (Security Researcher) - @brunofraga_net
+    Nong Hoang Tu (Parrot OS core dev and maintainer) - <dmknght@parrotsec.org>
 
     Usage: pompem.py [-s/--search <keyword,keyword,keyword,...>]
                      [--txt Write txt file                     ]
