@@ -1,0 +1,11 @@
+#!/usr/bin/make -f
+#export DH_VERBOSE = 1
+
+DIR2FIX=$(CURDIR)/debian/pompem/usr/share/pompem
+
+%:
+	dh $@
+
+override_dh_fixperms:
+	find $(DIR2FIX) -type f -name '*.py' -exec chmod +x {} \;
+	dh_fixperms
