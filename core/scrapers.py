@@ -160,37 +160,37 @@ class CXSecurity(Scraper):
 #             self.list_result.append(dict_result)
 
 
-class Vulners(Scraper):
-    def __init__(self, key_word):
-        Scraper.__init__(self)
-        self.name_site = "Vulners"
-        self.name_class = Vulners.__name__
-        self.key_word = key_word
-        self.url_domain = "vulners.com"
-        self.path = "/api/v3/search/lucene/"
-        self.list_result = []
-        self.regex_date = re.compile(r"(\d{4})-(\d{2})-(\d{2})")
+# class Vulners(Scraper):
+#     def __init__(self, key_word):
+#         Scraper.__init__(self)
+#         self.name_site = "Vulners"
+#         self.name_class = Vulners.__name__
+#         self.key_word = key_word
+#         self.url_domain = "vulners.com"
+#         self.path = "/api/v3/search/lucene/"
+#         self.list_result = []
+#         self.regex_date = re.compile(r"(\d{4})-(\d{2})-(\d{2})")
 
-    def run(self, ):
-        try:
-            data = {}
-            data['query'] = "{0} last year".format(self.key_word)
-            req_worker = RequestWorkerHttpLib(self.url_domain, self.path, data)
-            req_worker.start()
-            self.list_req_workers.append(req_worker)
-        except Exception as e:
-            import traceback
-            traceback.print_exc()
-        self._get_results()
+#     def run(self, ):
+#         try:
+#             data = {}
+#             data['query'] = "{0} last year".format(self.key_word)
+#             req_worker = RequestWorkerHttpLib(self.url_domain, self.path, data)
+#             req_worker.start()
+#             self.list_req_workers.append(req_worker)
+#         except Exception as e:
+#             import traceback
+#             traceback.print_exc()
+#         self._get_results()
 
-    def _parser(self, html):
-        json_data = json.loads(html)
-        for data in json_data['data']['search']:
-            dict_result = {}
-            dict_result['url'] = data["_source"]['href']
-            dict_result['name'] = data["_source"]["title"]
-            dict_result['date'] = self.regex_date.search(data["_source"]["published"]).group(0)
-            self.list_result.append(dict_result)
+#     def _parser(self, html):
+#         json_data = json.loads(html)
+#         for data in json_data['data']['search']:
+#             dict_result = {}
+#             dict_result['url'] = data["_source"]['href']
+#             dict_result['name'] = data["_source"]["title"]
+#             dict_result['date'] = self.regex_date.search(data["_source"]["published"]).group(0)
+#             self.list_result.append(dict_result)
 
 
 class NationaVulnerabilityDB(Scraper):
