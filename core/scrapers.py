@@ -14,7 +14,7 @@ class Scraper(Thread):
         self.list_result = None
         self.list_req_workers = []
 
-    def _parser(self):
+    def _parser(self, html):
         raise NotImplementedError()
 
     def join(self):
