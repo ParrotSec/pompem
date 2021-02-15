@@ -5,6 +5,7 @@ import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import http.client
 import json
+
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
@@ -31,10 +32,10 @@ class RequestWorker(Thread):
         req.decode = 'utf-8'
         self._html = req.text
 
-
     def join(self):
         Thread.join(self)
         return self._html
+
 
 class RequestWorkerHttpLib(Thread):
     def __init__(self, domain, path, data={}, type_req="POST"):
@@ -58,4 +59,3 @@ class RequestWorkerHttpLib(Thread):
     def join(self):
         Thread.join(self)
         return self._html
-
