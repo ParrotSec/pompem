@@ -40,10 +40,9 @@ MAX_PRINT_PER_SITE = 30
 
 def show_results(key_word, list_results):
     line = "*" + "=" * 78 + "+"
-    print("+Results {0}".format(key_word))
+    print("+ Results {0}".format(key_word))
     print(line)
-    print(
-        "|  Date                                     Url                                    ")
+    print("|  Date      |                              Url")
     print(line)
 
     for dict_result in list_results:
