@@ -1,3 +1,9 @@
+pompem (0.2.2-parrot1) rolling-testing; urgency=medium
+
+  * Add new patches
+
+ -- Nong Hoang Tu <dmknght@parrotsec.org>  Mon, 15 Feb 2021 18:21:27 +0700
+
 pompem (0.2.2-parrot0) rolling-testing; urgency=medium
 
   * Fix display line
