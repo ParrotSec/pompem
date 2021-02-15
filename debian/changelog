@@ -1,25 +1,21 @@
-pompem (0.2.2-parrot1) rolling-testing; urgency=medium
+pompem (0.2.0-6parrot3) rolling-testing; urgency=medium
 
-  * Add new patches
+  * Add new patches.
 
  -- Nong Hoang Tu <dmknght@parrotsec.org>  Mon, 15 Feb 2021 18:21:27 +0700
 
-pompem (0.2.2-parrot0) rolling-testing; urgency=medium
+pompem (0.2.0-6parrot2) rolling-testing; urgency=medium
 
   * Fix display line
   * Remove the old comments of old modules
   * Improve ascii column display
-  * Pep8 syntax
-  * Pep8 syntax
-  * Pep8 syntax
-  * Pep8 syntax
   * Pep8 syntax
   * Fix signature syntax
   * Remove Debian's config and ci
 
  -- Nong Hoang Tu <dmknght@parrotsec.org>  Mon, 15 Feb 2021 18:19:33 +0700
 
-pompem (0.2.1-parrot0) rolling-testing; urgency=medium
+pompem (0.2.0-6parrot1) rolling-testing; urgency=medium
 
   * Remove a down service
   * Remove vulner which requires API

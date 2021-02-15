@@ -1,0 +1,523 @@
+Description: Import Parrot patches.
+  * Add new patches.
+  * Fix display line
+  * Remove the old comments of old modules
+  * Improve ascii column display
+  * Pep8 syntax
+  * Fix signature syntax
+  * Remove Debian's config and ci
+  * Remove a down service
+  * Remove vulner which requires API
+  * Update new parser for wpscandb (wpvulndb)
+  * More friendly result.
+Author: Nong Hoang Tu <dmknght@parrotsec.org>
+Last-Update: 2021-04-28
+
+--- pompem-0.2.0.orig/common/__init__.py
++++ pompem-0.2.0/common/__init__.py
+@@ -0,0 +1 @@
++#!/usr/bin/python3
+--- pompem-0.2.0.orig/common/print_messages.py
++++ pompem-0.2.0/common/print_messages.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+ 
+ HELP_MESSAGE = """
+@@ -14,20 +14,21 @@ Options:
+ BASIC_INFO_MESSAGE = """
+ 
+            __________
+-           \______   \____   _____ ______   ____   _____
+-            |     ___/  _ \ /      \\____ \_/ __ \ /      \\
+-            |    |  (  <_> )  Y Y  \  |_> >  ___/|  Y Y  \\
+-            |____|   \____/|__|_|  /   __/ \___  >__|_|  /
+-                                 \/|__|        \/      \/
++           \\______   \\____   _____ ______   ____   _____
++            |     ___/  _ \\ /      \\____ \\_/ __ \\ /      \\
++            |    |  (  <_> )  Y Y  \\  |_> >  ___/|  Y Y  \\
++            |____|   \\____/|__|_|  /   __/ \\___  >__|_|  /
++                                 \\/|__|        \\/      \\/ 0.2.1 Parrot
+ 
+ 
+     Rafael Francischini (Programmer and Ethical Hacker) - @rfunix
+     Bruno Fraga (Security Researcher) - @brunofraga_net
++    Nong Hoang Tu (Parrot OS core dev and maintainer) - <dmknght@parrotsec.org>
+ 
+     Usage: pompem.py [-s/--search <keyword,keyword,keyword,...>]
+                      [--txt Write txt file                     ]
+                      [--html Write html file                   ]
+-                  Get basic options and Help, use: -h\--help
++                  Get basic options and Help, use: -h\\--help
+               """
+ 
+ GENERATE_TXT_FILE = """
+@@ -38,20 +39,23 @@ MAX_PRINT_PER_SITE = 30
+ 
+ 
+ def show_results(key_word, list_results):
+-    print ("+Results {0}".format(key_word))
+-    print ("+" + "-" * 200 + "+")
+-    print (
+-        "+Date            Description                                     Url                                    ")
+-    print ("+" + "-" * 200 + "+")
++    line = "*" + "=" * 78 + "+"
++    print("+ Results {0}".format(key_word))
++    print(line)
++    print("|  Date      |                              Url")
++    print(line)
+ 
+     for dict_result in list_results:
+         count_print = 0
+-        for key , result in dict_result.items():
++        for key, result in dict_result.items():
+             for exploit_data in result:
+-                if (count_print > MAX_PRINT_PER_SITE):
++                if count_print > MAX_PRINT_PER_SITE:
+                     break
+                 count_print += 1
+-                print("+ {0} | {1} | {2} ".format(exploit_data["date"],
+-                                                  str(exploit_data["name"])[0:50],
+-                                                  exploit_data["url"]))
+-                print ("+" + "-" * 200 + "+")
++                # print("| {0} | {1} | {2} ".format(exploit_data["date"],
++                #                                   str(exploit_data["name"])[0:50],
++                #                                   exploit_data["url"]))
++                print("| {0} | {1}".format(exploit_data["date"], exploit_data["url"]))
++                print("|" + "-" * 79)
++                print("| {0}".format(str(exploit_data["name"])))
++                print(line)
+--- pompem-0.2.0.orig/common/writers.py
++++ pompem-0.2.0/common/writers.py
+@@ -1,3 +1,4 @@
++#!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+ import os
+ import sys
+@@ -75,7 +76,7 @@ def open_url(url):
+         try:
+             subprocess.Popen(['xdg-open', url])
+         except OSError:
+-            print ('Please open a browser on: ' + url)
++            print('Please open a browser on: ' + url)
+ 
+ 
+ def write_txt(dict_all_results):
+@@ -85,11 +86,11 @@ def write_txt(dict_all_results):
+     with open("out.txt", "w") as f:
+         f.write("date;description;url\n")
+         for word_search, list_results in dict_all_results.items():
+-                for dict_result in list_results:
+-                    for key, result in dict_result.items():
+-                        for exploit_data in result:
+-                            f.write("{0};{1};{2}\n".format(
+-                                exploit_data["date"],
+-                                str(exploit_data["name"]),
+-                                exploit_data["url"])
+-                            )
++            for dict_result in list_results:
++                for key, result in dict_result.items():
++                    for exploit_data in result:
++                        f.write("{0};{1};{2}\n".format(
++                            exploit_data["date"],
++                            str(exploit_data["name"]),
++                            exploit_data["url"])
++                        )
+--- pompem-0.2.0.orig/core/__init__.py
++++ pompem-0.2.0/core/__init__.py
+@@ -0,0 +1 @@
++#!/usr/bin/python3
+--- pompem-0.2.0.orig/core/exploit_finder.py
++++ pompem-0.2.0/core/exploit_finder.py
+@@ -1,14 +1,14 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+-
+-NUM_WORKERS = 5
+-from core.scrapers import PacketStorm, CXSecurity, ZeroDay, Vulners, \
++from core.scrapers import PacketStorm, CXSecurity, \
+     NationaVulnerabilityDB, WpvulndbB
+ from common.print_messages import show_results
+ from common.writers import write_html, write_txt
+ from common.writers import open_url
+ from common.print_messages import GENERATE_TXT_FILE
+ 
++NUM_WORKERS = 5
++
+ 
+ class ExploitFinder(object):
+     def __init__(self, args=None):
+@@ -16,8 +16,6 @@ class ExploitFinder(object):
+         self.key_words = self.parameters.keywords.split(',')
+         self.list_scrapers = [PacketStorm,
+                               CXSecurity,
+-                              ZeroDay,
+-                              Vulners,
+                               NationaVulnerabilityDB,
+                               WpvulndbB
+                               ]
+--- pompem-0.2.0.orig/core/request_worker.py
++++ pompem-0.2.0/core/request_worker.py
+@@ -1,9 +1,11 @@
++#!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+ from threading import Thread
+ import requests
+ from requests.packages.urllib3.exceptions import InsecureRequestWarning
+ import http.client
+ import json
++
+ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+ 
+ 
+@@ -30,11 +32,11 @@ class RequestWorker(Thread):
+         req.decode = 'utf-8'
+         self._html = req.text
+ 
+-
+     def join(self):
+         Thread.join(self)
+         return self._html
+ 
++
+ class RequestWorkerHttpLib(Thread):
+     def __init__(self, domain, path, data={}, type_req="POST"):
+         Thread.__init__(self)
+@@ -57,4 +59,3 @@ class RequestWorkerHttpLib(Thread):
+     def join(self):
+         Thread.join(self)
+         return self._html
+-
+--- pompem-0.2.0.orig/core/scrapers.py
++++ pompem-0.2.0/core/scrapers.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+ 
+ from threading import Thread
+@@ -14,7 +14,7 @@ class Scraper(Thread):
+         self.list_result = None
+         self.list_req_workers = []
+ 
+-    def _parser(self):
++    def _parser(self, html):
+         raise NotImplementedError()
+ 
+     def join(self):
+@@ -24,10 +24,10 @@ class Scraper(Thread):
+     def _get_results(self):
+         for r_worker in self.list_req_workers:
+             try:
++                import traceback
+                 html = r_worker.join()
+                 self._parser(html)
+-            except Exception as e:
+-                import traceback
++            except Exception:
+                 traceback.print_exc()
+ 
+ 
+@@ -49,12 +49,12 @@ class PacketStorm(Scraper):
+     def run(self, ):
+         for page in range(self.page_max):
+             try:
++                import traceback
+                 url_search = self.url.format(page + 1, self.key_word)
+                 req_worker = RequestWorker(url_search)
+                 req_worker.start()
+                 self.list_req_workers.append(req_worker)
+-            except Exception as e:
+-                import traceback
++            except Exception:
+                 traceback.print_exc()
+         self._get_results()
+ 
+@@ -92,13 +92,13 @@ class CXSecurity(Scraper):
+         )
+         for page in range(self.page_max):
+             try:
++                import traceback
+                 url_search = self.url.format(now_date, page + 1, self.page_max,
+                                              self.key_word)
+                 req_worker = RequestWorker(url_search)
+                 req_worker.start()
+                 self.list_req_workers.append(req_worker)
+-            except Exception as e:
+-                import traceback
++            except Exception:
+                 traceback.print_exc()
+         self._get_results()
+ 
+@@ -118,79 +118,79 @@ class CXSecurity(Scraper):
+             self.list_result.append(dict_result)
+ 
+ 
+-class ZeroDay(Scraper):
+-    def __init__(self, key_word):
+-        Scraper.__init__(self)
+-        self.name_site = "ZeroDay"
+-        self.name_class = ZeroDay.__name__
+-        self.key_word = key_word
+-        self.url = "https://j5dtyooqyukedkrl.onion.to/search?search_request={0}"
+-        self.session_url = "https://j5dtyooqyukedkrl.onion.to"
+-        self.base_url = "https://j5dtyooqyukedkrl.onion.to"
+-        self.list_result = []
+-        self.regex_item = re.compile(r"(?msi)<div class='ExploitTableContent'.*?<div class='tips_value_big'>")
+-        self.regex_date = re.compile(r"(?msi)href='/date.*?>(\d{2})-(\d{2})-(\d{4})")
+-        self.regex_url = re.compile(r"(?msi)href='(/exploit.*?)'")
+-        self.regex_name = re.compile(r"(?msi)href='/exploit.*?'>([^<]*?)<")
+-
+-    def run(self, ):
+-        try:
+-            url_search = self.url.format(self.key_word)
+-            req_worker = RequestWorker(url=url_search, data={'agree': 'Yes%2C+I+agree'},
+-                                       session_url=self.session_url)
+-            req_worker.start()
+-            self.list_req_workers.append(req_worker)
+-        except Exception as e:
+-            import traceback
+-            traceback.print_exc()
+-        self._get_results()
+-
+-    def _parser(self, html):
+-        for item in self.regex_item.finditer(html):
+-            item_html = item.group(0)
+-            dict_result = {}
+-            dict_result['url'] = self.base_url + self.regex_url.search(item_html).group(1)
+-            match_date = self.regex_date.search(item_html)
+-            date = "{0}-{1}-{2}".format(match_date.group(3),
+-                                        match_date.group(2),
+-                                        match_date.group(1)
+-                                        )
+-            dict_result['date'] = date
+-            dict_result['name'] = self.regex_name.search(item_html).group(1)
+-            self.list_result.append(dict_result)
+-
+-
+-class Vulners(Scraper):
+-    def __init__(self, key_word):
+-        Scraper.__init__(self)
+-        self.name_site = "Vulners"
+-        self.name_class = Vulners.__name__
+-        self.key_word = key_word
+-        self.url_domain = "vulners.com"
+-        self.path = "/api/v3/search/lucene/"
+-        self.list_result = []
+-        self.regex_date = re.compile(r"(\d{4})-(\d{2})-(\d{2})")
+-
+-    def run(self, ):
+-        try:
+-            data = {}
+-            data['query'] = "{0} last year".format(self.key_word)
+-            req_worker = RequestWorkerHttpLib(self.url_domain, self.path, data)
+-            req_worker.start()
+-            self.list_req_workers.append(req_worker)
+-        except Exception as e:
+-            import traceback
+-            traceback.print_exc()
+-        self._get_results()
+-
+-    def _parser(self, html):
+-        json_data = json.loads(html)
+-        for data in json_data['data']['search']:
+-            dict_result = {}
+-            dict_result['url'] = data["_source"]['href']
+-            dict_result['name'] = data["_source"]["title"]
+-            dict_result['date'] = self.regex_date.search(data["_source"]["published"]).group(0)
+-            self.list_result.append(dict_result)
++# class ZeroDay(Scraper):
++#     def __init__(self, key_word):
++#         Scraper.__init__(self)
++#         self.name_site = "ZeroDay"
++#         self.name_class = ZeroDay.__name__
++#         self.key_word = key_word
++#         self.url = "https://j5dtyooqyukedkrl.onion.to/search?search_request={0}"
++#         self.session_url = "https://j5dtyooqyukedkrl.onion.to"
++#         self.base_url = "https://j5dtyooqyukedkrl.onion.to"
++#         self.list_result = []
++#         self.regex_item = re.compile(r"(?msi)<div class='ExploitTableContent'.*?<div class='tips_value_big'>")
++#         self.regex_date = re.compile(r"(?msi)href='/date.*?>(\d{2})-(\d{2})-(\d{4})")
++#         self.regex_url = re.compile(r"(?msi)href='(/exploit.*?)'")
++#         self.regex_name = re.compile(r"(?msi)href='/exploit.*?'>([^<]*?)<")
++
++#     def run(self, ):
++#         try:
++#             url_search = self.url.format(self.key_word)
++#             req_worker = RequestWorker(url=url_search, data={'agree': 'Yes%2C+I+agree'},
++#                                        session_url=self.session_url)
++#             req_worker.start()
++#             self.list_req_workers.append(req_worker)
++#         except Exception as e:
++#             import traceback
++#             traceback.print_exc()
++#         self._get_results()
++
++#     def _parser(self, html):
++#         for item in self.regex_item.finditer(html):
++#             item_html = item.group(0)
++#             dict_result = {}
++#             dict_result['url'] = self.base_url + self.regex_url.search(item_html).group(1)
++#             match_date = self.regex_date.search(item_html)
++#             date = "{0}-{1}-{2}".format(match_date.group(3),
++#                                         match_date.group(2),
++#                                         match_date.group(1)
++#                                         )
++#             dict_result['date'] = date
++#             dict_result['name'] = self.regex_name.search(item_html).group(1)
++#             self.list_result.append(dict_result)
++
++
++# class Vulners(Scraper):
++#     def __init__(self, key_word):
++#         Scraper.__init__(self)
++#         self.name_site = "Vulners"
++#         self.name_class = Vulners.__name__
++#         self.key_word = key_word
++#         self.url_domain = "vulners.com"
++#         self.path = "/api/v3/search/lucene/"
++#         self.list_result = []
++#         self.regex_date = re.compile(r"(\d{4})-(\d{2})-(\d{2})")
++
++#     def run(self, ):
++#         try:
++#             data = {}
++#             data['query'] = "{0} last year".format(self.key_word)
++#             req_worker = RequestWorkerHttpLib(self.url_domain, self.path, data)
++#             req_worker.start()
++#             self.list_req_workers.append(req_worker)
++#         except Exception as e:
++#             import traceback
++#             traceback.print_exc()
++#         self._get_results()
++
++#     def _parser(self, html):
++#         json_data = json.loads(html)
++#         for data in json_data['data']['search']:
++#             dict_result = {}
++#             dict_result['url'] = data["_source"]['href']
++#             dict_result['name'] = data["_source"]["title"]
++#             dict_result['date'] = self.regex_date.search(data["_source"]["published"]).group(0)
++#             self.list_result.append(dict_result)
+ 
+ 
+ class NationaVulnerabilityDB(Scraper):
+@@ -209,8 +209,9 @@ class NationaVulnerabilityDB(Scraper):
+         self.regex_url = re.compile(r'(?msi)<dt>.*?href="([^"]*?vulnId.*?)"')
+ 
+     def run(self, ):
+-        for page in range(0,self.page_max+1,20):
++        for page in range(0, self.page_max + 1, 20):
+             try:
++                import traceback
+                 url_search = self.url.format(
+                     self.key_word,
+                     page
+@@ -218,16 +219,14 @@ class NationaVulnerabilityDB(Scraper):
+                 req_worker = RequestWorker(url_search)
+                 req_worker.start()
+                 self.list_req_workers.append(req_worker)
+-            except Exception as e:
+-                import traceback
++            except Exception:
+                 traceback.print_exc()
+         self._get_results()
+ 
+     def _parser(self, html):
+         for item in self.regex_item.finditer(html):
+             item_html = item.group(0)
+-            dict_results = {}
+-            dict_results['name'] = self.regex_name.search(item_html).group(1)
++            dict_results = {'name': self.regex_name.search(item_html).group(1)}
+             match_date = self.regex_date.search(item_html)
+             date = "{0}-{1}-{2}".format(match_date.group(3),
+                                         match_date.group(1),
+@@ -237,24 +236,29 @@ class NationaVulnerabilityDB(Scraper):
+             dict_results['url'] = self.base_url + self.regex_url.search(item_html).group(1)
+             self.list_result.append(dict_results)
+ 
++
+ class WpvulndbB(Scraper):
+     def __init__(self, key_word):
+         Scraper.__init__(self)
+         self.name_site = "Wpvulndb"
+         self.name_class = NationaVulnerabilityDB.__name__
+         self.key_word = key_word
+-        self.url = "https://wpvulndb.com/searches?page={1}&text={0}&utf8=%E2%9C%93&vuln_type="
+-        self.url_base = "https://wpvulndb.com"
++        # self.url = "https://wpvulndb.com/searches?page={1}&text={0}&utf8=%E2%9C%93&vuln_type="
++        # self.url_base = "https://wpvulndb.com"
++        self.url = "https://wpscan.com/search?page={1}&text={0}"
++        self.url_base = "https://wpscan.com"
+         self.page_max = 2
+         self.list_result = []
+-        self.regex_item = re.compile(r'(?msi)<tr>.*?<td>.*?<a.*?</tr>')
+-        self.regex_name = re.compile(r'(?msi)<a href="[^"]*?">\d+?<.*?href.*?>([^<]*?)<')
+-        self.regex_date = re.compile(r'(?msi)created-at">([^<]*?)<')
+-        self.regex_url = re.compile(r'(?msi)<a href="([^"]*?)">\d+?<')
++        self.regex_item = re.compile(
++            r'(?msi)<div class=\"item_itemWrapper__rmvws\">.*?</div><div.*?<p.*?</div.*?<div.*?</div></div>')
++        self.regex_name = re.compile(r'(?msi)<a href=\"[^\"]*?\">\d+?<.*?href.*?>([^<]*?)<')
++        self.regex_date = re.compile(r'<p class=\"item_itemText__5TkXs\">([0-9\-]+)</p>')
++        self.regex_url = re.compile(r'(?msi)<a href=\"([^\"]*?)\">\d+?<')
+ 
+     def run(self, ):
+-        for page in range(self.page_max+1):
++        for page in range(self.page_max + 1):
+             try:
++                import traceback
+                 url_search = self.url.format(
+                     self.key_word,
+                     page
+@@ -262,8 +266,7 @@ class WpvulndbB(Scraper):
+                 req_worker = RequestWorker(url_search)
+                 req_worker.start()
+                 self.list_req_workers.append(req_worker)
+-            except Exception as e:
+-                import traceback
++            except Exception:
+                 traceback.print_exc()
+         self._get_results()
+ 
+@@ -271,10 +274,11 @@ class WpvulndbB(Scraper):
+         for item in self.regex_item.finditer(html):
+             dict_results = {}
+             item_html = item.group(0)
+-            url = self.url_base + self.regex_url.search(item_html).group(1)
+-            dict_results['url'] = url
+-            dict_results['name'] = self.regex_name.search(item_html).group(1)
+-            dict_results['date'] =  self.regex_date.search(item_html).group(1)
+-            self.list_result.append(dict_results)
+-
+-
++            try:
++                url = self.url_base + self.regex_url.search(item_html).group(1)
++                dict_results['url'] = url
++                dict_results['name'] = self.regex_name.search(item_html).group(1)
++                dict_results['date'] = self.regex_date.search(item_html).group(1)
++                self.list_result.append(dict_results)
++            except AttributeError:
++                pass
+--- pompem-0.2.0.orig/pompem.py
++++ pompem-0.2.0/pompem.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+ 
+ import optparse
+@@ -34,10 +34,10 @@ def main():
+ 
+     if not parameters.keywords:
+         if parameters.help:
+-            print (HELP_MESSAGE)
++            print(HELP_MESSAGE)
+             exit(0)
+         else:
+-            print (BASIC_INFO_MESSAGE)
++            print(BASIC_INFO_MESSAGE)
+             exit(0)
+ 
+     exploit_finder = ExploitFinder(parameters)

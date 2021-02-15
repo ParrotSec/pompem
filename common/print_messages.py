@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 HELP_MESSAGE = """
@@ -14,21 +14,20 @@ Options:
 BASIC_INFO_MESSAGE = """
 
            __________
-           \\______   \\____   _____ ______   ____   _____
-            |     ___/  _ \\ /      \\____ \\_/ __ \\ /      \\
-            |    |  (  <_> )  Y Y  \\  |_> >  ___/|  Y Y  \\
-            |____|   \\____/|__|_|  /   __/ \\___  >__|_|  /
-                                 \\/|__|        \\/      \\/ 0.2.1 Parrot
+           \______   \____   _____ ______   ____   _____
+            |     ___/  _ \ /      \\____ \_/ __ \ /      \\
+            |    |  (  <_> )  Y Y  \  |_> >  ___/|  Y Y  \\
+            |____|   \____/|__|_|  /   __/ \___  >__|_|  /
+                                 \/|__|        \/      \/
 
 
     Rafael Francischini (Programmer and Ethical Hacker) - @rfunix
     Bruno Fraga (Security Researcher) - @brunofraga_net
-    Nong Hoang Tu (Parrot OS core dev and maintainer) - <dmknght@parrotsec.org>
 
     Usage: pompem.py [-s/--search <keyword,keyword,keyword,...>]
                      [--txt Write txt file                     ]
                      [--html Write html file                   ]
-                  Get basic options and Help, use: -h\\--help
+                  Get basic options and Help, use: -h\--help
               """
 
 GENERATE_TXT_FILE = """
@@ -39,23 +38,20 @@ MAX_PRINT_PER_SITE = 30
 
 
 def show_results(key_word, list_results):
-    line = "*" + "=" * 78 + "+"
-    print("+ Results {0}".format(key_word))
-    print(line)
-    print("|  Date      |                              Url")
-    print(line)
+    print ("+Results {0}".format(key_word))
+    print ("+" + "-" * 200 + "+")
+    print (
+        "+Date            Description                                     Url                                    ")
+    print ("+" + "-" * 200 + "+")
 
     for dict_result in list_results:
         count_print = 0
-        for key, result in dict_result.items():
+        for key , result in dict_result.items():
             for exploit_data in result:
-                if count_print > MAX_PRINT_PER_SITE:
+                if (count_print > MAX_PRINT_PER_SITE):
                     break
                 count_print += 1
-                # print("| {0} | {1} | {2} ".format(exploit_data["date"],
-                #                                   str(exploit_data["name"])[0:50],
-                #                                   exploit_data["url"]))
-                print("| {0} | {1}".format(exploit_data["date"], exploit_data["url"]))
-                print("|" + "-" * 79)
-                print("| {0}".format(str(exploit_data["name"])))
-                print(line)
+                print("+ {0} | {1} | {2} ".format(exploit_data["date"],
+                                                  str(exploit_data["name"])[0:50],
+                                                  exploit_data["url"]))
+                print ("+" + "-" * 200 + "+")

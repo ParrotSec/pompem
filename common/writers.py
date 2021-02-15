@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import os
 import sys
@@ -76,7 +75,7 @@ def open_url(url):
         try:
             subprocess.Popen(['xdg-open', url])
         except OSError:
-            print('Please open a browser on: ' + url)
+            print ('Please open a browser on: ' + url)
 
 
 def write_txt(dict_all_results):
@@ -86,11 +85,11 @@ def write_txt(dict_all_results):
     with open("out.txt", "w") as f:
         f.write("date;description;url\n")
         for word_search, list_results in dict_all_results.items():
-            for dict_result in list_results:
-                for key, result in dict_result.items():
-                    for exploit_data in result:
-                        f.write("{0};{1};{2}\n".format(
-                            exploit_data["date"],
-                            str(exploit_data["name"]),
-                            exploit_data["url"])
-                        )
+                for dict_result in list_results:
+                    for key, result in dict_result.items():
+                        for exploit_data in result:
+                            f.write("{0};{1};{2}\n".format(
+                                exploit_data["date"],
+                                str(exploit_data["name"]),
+                                exploit_data["url"])
+                            )
