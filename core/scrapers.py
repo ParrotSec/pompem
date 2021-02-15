@@ -24,10 +24,10 @@ class Scraper(Thread):
     def _get_results(self):
         for r_worker in self.list_req_workers:
             try:
+                import traceback
                 html = r_worker.join()
                 self._parser(html)
-            except Exception as e:
-                import traceback
+            except Exception:
                 traceback.print_exc()
 
 
@@ -49,12 +49,12 @@ class PacketStorm(Scraper):
     def run(self, ):
         for page in range(self.page_max):
             try:
+                import traceback
                 url_search = self.url.format(page + 1, self.key_word)
                 req_worker = RequestWorker(url_search)
                 req_worker.start()
                 self.list_req_workers.append(req_worker)
-            except Exception as e:
-                import traceback
+            except Exception:
                 traceback.print_exc()
         self._get_results()
 
@@ -92,13 +92,13 @@ class CXSecurity(Scraper):
         )
         for page in range(self.page_max):
             try:
+                import traceback
                 url_search = self.url.format(now_date, page + 1, self.page_max,
                                              self.key_word)
                 req_worker = RequestWorker(url_search)
                 req_worker.start()
                 self.list_req_workers.append(req_worker)
-            except Exception as e:
-                import traceback
+            except Exception:
                 traceback.print_exc()
         self._get_results()
 
@@ -209,8 +209,9 @@ class NationaVulnerabilityDB(Scraper):
         self.regex_url = re.compile(r'(?msi)<dt>.*?href="([^"]*?vulnId.*?)"')
 
     def run(self, ):
-        for page in range(0,self.page_max+1,20):
+        for page in range(0, self.page_max + 1, 20):
             try:
+                import traceback
                 url_search = self.url.format(
                     self.key_word,
                     page
@@ -218,16 +219,14 @@ class NationaVulnerabilityDB(Scraper):
                 req_worker = RequestWorker(url_search)
                 req_worker.start()
                 self.list_req_workers.append(req_worker)
-            except Exception as e:
-                import traceback
+            except Exception:
                 traceback.print_exc()
         self._get_results()
 
     def _parser(self, html):
         for item in self.regex_item.finditer(html):
             item_html = item.group(0)
-            dict_results = {}
-            dict_results['name'] = self.regex_name.search(item_html).group(1)
+            dict_results = {'name': self.regex_name.search(item_html).group(1)}
             match_date = self.regex_date.search(item_html)
             date = "{0}-{1}-{2}".format(match_date.group(3),
                                         match_date.group(1),
@@ -236,6 +235,7 @@ class NationaVulnerabilityDB(Scraper):
             dict_results['date'] = date
             dict_results['url'] = self.base_url + self.regex_url.search(item_html).group(1)
             self.list_result.append(dict_results)
+
 
 class WpvulndbB(Scraper):
     def __init__(self, key_word):
@@ -249,14 +249,16 @@ class WpvulndbB(Scraper):
         self.url_base = "https://wpscan.com"
         self.page_max = 2
         self.list_result = []
-        self.regex_item = re.compile(r'(?msi)<div class=\"item_itemWrapper__rmvws\">.*?</div><div.*?<p.*?</div.*?<div.*?</div></div>')
+        self.regex_item = re.compile(
+            r'(?msi)<div class=\"item_itemWrapper__rmvws\">.*?</div><div.*?<p.*?</div.*?<div.*?</div></div>')
         self.regex_name = re.compile(r'(?msi)<a href=\"[^\"]*?\">\d+?<.*?href.*?>([^<]*?)<')
         self.regex_date = re.compile(r'<p class=\"item_itemText__5TkXs\">([0-9\-]+)</p>')
         self.regex_url = re.compile(r'(?msi)<a href=\"([^\"]*?)\">\d+?<')
 
     def run(self, ):
-        for page in range(self.page_max+1):
+        for page in range(self.page_max + 1):
             try:
+                import traceback
                 url_search = self.url.format(
                     self.key_word,
                     page
@@ -264,8 +266,7 @@ class WpvulndbB(Scraper):
                 req_worker = RequestWorker(url_search)
                 req_worker.start()
                 self.list_req_workers.append(req_worker)
-            except Exception as e:
-                import traceback
+            except Exception:
                 traceback.print_exc()
         self._get_results()
 
@@ -273,10 +274,11 @@ class WpvulndbB(Scraper):
         for item in self.regex_item.finditer(html):
             dict_results = {}
             item_html = item.group(0)
-            url = self.url_base + self.regex_url.search(item_html).group(1)
-            dict_results['url'] = url
-            dict_results['name'] = self.regex_name.search(item_html).group(1)
-            dict_results['date'] =  self.regex_date.search(item_html).group(1)
-            self.list_result.append(dict_results)
-
-
+            try:
+                url = self.url_base + self.regex_url.search(item_html).group(1)
+                dict_results['url'] = url
+                dict_results['name'] = self.regex_name.search(item_html).group(1)
+                dict_results['date'] = self.regex_date.search(item_html).group(1)
+                self.list_result.append(dict_results)
+            except AttributeError:
+                pass
